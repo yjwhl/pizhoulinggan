@@ -237,19 +237,27 @@
                 const groupElements = document.querySelectorAll('.group'); // 每次生成时重新获取 group 元素
                 groupElements.forEach((groupElement, index) => {
                     const checkbox = groupElement.querySelector('.group-checkbox');
+                    const groupNameInput = groupElement.querySelector('input[type="text"]');
+                    const groupName = groupNameInput.value || `组 ${index + 1}`;
+                    console.log(`--- Group: ${groupName} ---`); // 打印当前处理的组名
+                    console.log(`Checkbox Checked: ${checkbox.checked}`); // 打印复选框状态
                     if (checkbox.checked) {
-                        const groupNameInput = groupElement.querySelector('input[type="text"]');
-                        const groupName = groupNameInput.value || `组 ${index + 1}`;
                         const wordsTextarea = groupElement.querySelector('textarea');
-                        const words = wordsTextarea.value.trim().split(/[\n,]+/).filter(word => word);
+                        // 修改 split 方法，支持中文和英文逗号
+                        const words = wordsTextarea.value.trim().split(/[\n,，]+/).filter(word => word);
+                        console.log(`Words in Group:`, words); // 打印该组的所有词汇
                         const randomWord = getRandomElement(words);
+                        console.log(`Random Word Selected:`, randomWord); // 打印随机选中的词汇
                         if (randomWord) {
                             combination.push(randomWord);
                         } else {
                             combination.push(`[${groupName}无词汇]`);
                         }
+                    } else {
+                        console.log(`Group Skipped (not checked)`); // 打印未选中的组
                     }
                 });
+                console.log("--- Final Combination ---", combination); // 打印最终的组合结果
                 outputArea.value = combination.join(', ');
             }
 
